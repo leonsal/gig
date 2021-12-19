@@ -34,7 +34,7 @@ build_debug:
 #
 # install libraries
 #
-install: build
+install: all
 	cmake -E make_directory $(INSTALL_DIR)
 	cmake -E copy libgiggl.a libgigvk.a libglfw3.a $(INSTALL_DIR)
 
