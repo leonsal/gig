@@ -36,7 +36,7 @@ build_debug:
 #
 install: build
 	cmake -E make_directory $(INSTALL_DIR)
-	cmake -E copy libcimguigl.a libcimguivk.a libglfw3.a $(INSTALL_DIR)
+	cmake -E copy libgiggl.a libgigvk.a libglfw3.a $(INSTALL_DIR)
 
 #
 # clean all targets

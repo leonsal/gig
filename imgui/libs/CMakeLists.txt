@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 
-project(libcimgui)
+project(giglibs)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
@@ -51,9 +51,6 @@ if (WIN32)
     include_directories(vulkan)
 endif()
 
-add_library(cimguigl STATIC ${CIMGUI_SOURCES} ${CIMPLOT_SOURCES} ${DISPLAYGL_SOURCES})
-add_library(cimguivk STATIC ${CIMGUI_SOURCES} ${CIMPLOT_SOURCES} ${DISPLAYVK_SOURCES})
+add_library(giggl STATIC ${CIMGUI_SOURCES} ${CIMPLOT_SOURCES} ${DISPLAYGL_SOURCES})
+add_library(gigvk STATIC ${CIMGUI_SOURCES} ${CIMPLOT_SOURCES} ${DISPLAYVK_SOURCES})
 
-install(
-    TARGETS cimguigl cimguivk
-)
