@@ -23,6 +23,10 @@ Also you need to install [git](https://git-scm.com/downloads) and [cmake](https:
 
 ## Building
 
+The following commands download the repository, builds the C/C++ libraries
+and install them. In Linux the libraries are installed in `/usr/local/lib`
+and in Window in `C:\giglibs`.
+
 ```
 >git clone https://github.com/leonsal/gig
 >cd gig
