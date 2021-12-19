@@ -11,17 +11,16 @@ import (
 	"unsafe"
 )
 
+// DisplayConfig describes the display (native window) configuration
 type DisplayConfig struct {
-	Title      string
-	Width      int
-	Height     int
-	MSAA       int
+	Evtimeout  float64
 	Fullscreen bool
 	Opengl     OpenglConfig
 }
 
 type OpenglConfig struct {
-	ES bool
+	ES   bool
+	MSAA int
 }
 
 type Display struct {
@@ -29,28 +28,25 @@ type Display struct {
 }
 
 // DisplayInit creates and returns a native window display
-func DisplayInit(cfg *DisplayConfig) (Display, error) {
+func DisplayInit(title string, width, height int, cfg *DisplayConfig) (Display, error) {
 
 	var cc C.display_config_t
 	if cfg == nil {
-		cc.title = C.CString("")
-		cc.width = 800
-		cc.height = 600
-		cc.msaa = 0
+		cc.ev_timeout = 0
 		cc.fullscreen = false
 		cc.opengl.es = false
+		cc.opengl.msaa = 0
 	} else {
-		cc.title = C.CString(cfg.Title)
-		cc.width = C.int(cfg.Width)
-		cc.height = C.int(cfg.Height)
-		cc.msaa = C.int(cfg.MSAA)
+		cc.ev_timeout = C.double(cfg.Evtimeout)
 		cc.fullscreen = C.bool(cfg.Fullscreen)
 		cc.opengl.es = C.bool(cfg.Opengl.ES)
+		cc.opengl.msaa = C.int(0)
 	}
-	defer C.free(unsafe.Pointer(cc.title))
-	var err C.int
 
-	d := C.display_init(&cc, &err)
+	ctitle := C.CString(title)
+	defer C.free(unsafe.Pointer(ctitle))
+	var err C.int
+	d := C.display_init(ctitle, C.int(width), C.int(height), &cc, &err)
 	if err != 0 {
 		return Display{}, fmt.Errorf("Error:%d returned by backend", err)
 	}
@@ -98,21 +94,25 @@ func (d Display) EndFrame() {
 	C.display_end_frame(d.di)
 }
 
+// Returns if the native window should be closed
 func (d Display) SetShouldClose(close bool) {
 
 	C.display_set_should_close(d.di, C.bool(close))
 }
 
+// Creates a texture for the current backend and return its ImGui ID
 func (d Display) CreateTexture() TextureID {
 
 	return TextureID(C.display_create_texture(d.di))
 }
 
+// Deletes a previously created texture by its ID
 func (d Display) DeleteTexture(tid TextureID) {
 
 	C.display_delete_texture(d.di, C.ImTextureID(tid))
 }
 
+// Transfer texture with the specified id, width, height and pixels to the backend.
 func (d Display) TransferTexture(tid TextureID, width, height int, pix []color.RGBA) {
 
 	C.display_transfer_texture(d.di, C.ImTextureID(tid), C.int(width), C.int(height), unsafe.Pointer(&pix[0].R))

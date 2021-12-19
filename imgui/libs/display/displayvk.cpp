@@ -330,7 +330,7 @@ typedef struct displayVK {
 // Default Display
 static displayVK* displayDef;
 
-displayImpl display_init(display_config_t* cfg, int* error) {
+displayImpl display_init(const char* title, int width, int height, display_config_t* cfg, int* error) {
 
     // Setup GLFW window
     glfwSetErrorCallback(glfw_error_callback);
@@ -345,7 +345,7 @@ displayImpl display_init(display_config_t* cfg, int* error) {
         monitor = glfwGetPrimaryMonitor();
     }
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    auto win = glfwCreateWindow(cfg->width, cfg->height, cfg->title, monitor, nullptr);
+    auto win = glfwCreateWindow(width, height, title, monitor, nullptr);
 
     // Setup Vulkan
     if (!glfwVulkanSupported())

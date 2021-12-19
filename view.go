@@ -37,14 +37,11 @@ func ViewInit(title string, width, height int) (*View, error) {
 
 	// Creates the default display window
 	cfg := imgui.DisplayConfig{
-		Title:      title,
-		Width:      width,
-		Height:     height,
-		MSAA:       0,
+		Evtimeout:  0,
 		Fullscreen: false,
 		Opengl:     imgui.OpenglConfig{ES: *opOpengles},
 	}
-	disp, err := imgui.DisplayInit(&cfg)
+	disp, err := imgui.DisplayInit(title, width, height, &cfg)
 	if err != nil {
 		return nil, err
 	}

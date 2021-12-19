@@ -21,7 +21,7 @@ static void glfw_error_callback(int error, const char* description) {
 }
 
 // Initializes the default display and return pointer to its state
-displayImpl display_init(display_config_t* cfg, int* error) {
+displayImpl display_init(const char* title, int width, int height, display_config_t* cfg, int* error) {
 
     if (displayDef != nullptr) {
         *error = 1;
@@ -54,7 +54,6 @@ displayImpl display_init(display_config_t* cfg, int* error) {
         vminor = 3;
     }
 
-    printf("api:%d v:%s major:%d, minor:%d\n", clientApi, gGlVersion, vmajor, vminor);
     // Set GLFW hints
     glfwWindowHint(GLFW_CLIENT_API, clientApi);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, vmajor);
@@ -63,8 +62,8 @@ displayImpl display_init(display_config_t* cfg, int* error) {
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
     }
 
-    if (cfg->msaa > 0 && cfg->msaa <= 16) {
-        glfwWindowHint(GLFW_SAMPLES, cfg->msaa);
+    if (cfg->opengl.msaa > 0 && cfg->opengl.msaa <= 16) {
+        glfwWindowHint(GLFW_SAMPLES, cfg->opengl.msaa);
     }
 
     // Create window
@@ -72,7 +71,7 @@ displayImpl display_init(display_config_t* cfg, int* error) {
     if (cfg->fullscreen) {
         monitor = glfwGetPrimaryMonitor();
     }
-    auto win = glfwCreateWindow(cfg->width, cfg->height, cfg->title, monitor, nullptr);
+    auto win = glfwCreateWindow(width, height, title, monitor, nullptr);
     if (win == nullptr) {
         fprintf(stderr, "Error creating GLFW Window");
         *error = 3;

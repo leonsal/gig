@@ -9,19 +9,16 @@ typedef void* displayImpl;
 
 // Common Display configuration
 typedef struct display_config {
-    const char* title;
-    int         width;
-    int         height;
-    int         msaa;
     double      ev_timeout;
     bool        fullscreen;
     struct {
         bool es;
+        int  msaa;
     } opengl;
 } display_config_t;
 
 // Common Display methods
-displayImpl display_init(display_config_t* cfg, int* error);
+displayImpl display_init(const char* title, int width, int height, display_config_t* cfg, int* error);
 void display_destroy(displayImpl di);
 void display_upload_fonts(displayImpl di);
 void display_size(displayImpl di, int* width, int* height);

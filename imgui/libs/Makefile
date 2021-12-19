@@ -8,9 +8,11 @@ RELEASE=-DCMAKE_BUILD_TYPE=Release
 GEN=-G "Unix Makefiles"
 JOBS=-j4
 INSTALL_DIR=/usr/local/lib
+SUDO=sudo
 ifeq ($(OS),Windows_NT)
 	GEN=-G "MinGW Makefiles"
 	INSTALL_DIR=/giglibs
+	SUDO=""
 endif
 
 #
@@ -23,6 +25,13 @@ build:
 	cmake $(GEN) -Bbuild $(GCC) $(RELEASE)
 
 #
+# install libraries
+#
+install: all
+	$(SUDO) cmake -E make_directory $(INSTALL_DIR)
+	$(SUDO) cmake -E copy libgiggl.a libgigvk.a libglfw3.a $(INSTALL_DIR)
+
+#
 # gcc debug
 #
 debug: build_debug
@@ -32,11 +41,12 @@ build_debug:
 	cmake $(GEN) -Bbuild_debug $(GCC) $(DEBUG)
 
 #
-# install libraries
+# install debug libraries
 #
-install: all
-	cmake -E make_directory $(INSTALL_DIR)
-	cmake -E copy libgiggl.a libgigvk.a libglfw3.a $(INSTALL_DIR)
+install_debug: debug
+	$(SUDO) cmake -E make_directory $(INSTALL_DIR)
+	$(SUDO) cmake -E copy libgiggl.a libgigvk.a libglfw3.a $(INSTALL_DIR)
+
 
 #
 # clean all targets
