@@ -26,14 +26,14 @@ static bool                     g_SwapChainRebuild = false;
 
 ImGui_ImplVulkanH_Window* wd;
 
-//static void check_vk_result(VkResult err)
-//{
-//    if (err == 0)
-//        return;
-//    fprintf(stderr, "[vulkan] Error: VkResult = %d\n", err);
-//    if (err < 0)
-//        abort();
-//}
+static void check_vk_result(VkResult err)
+{
+    if (err == 0)
+        return;
+    fprintf(stderr, "[vulkan] Error: VkResult = %d\n", err);
+    if (err < 0)
+        abort();
+}
 
 #ifdef IMGUI_VULKAN_DEBUG_REPORT
 static VKAPI_ATTR VkBool32 VKAPI_CALL debug_report(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType, uint64_t object, size_t location, int32_t messageCode, const char* pLayerPrefix, const char* pMessage, void* pUserData)
